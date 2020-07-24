@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="EUC-KR"?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"  "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="insert">
+
+	<insert id="setGroupAll" parameterClass="com.skyun.recon.util.database.ibatis.vo.groupallVo">
+
+		INSERT INTO pi_groupall
+		(group_id,comments,search_status,name,search_time,matches,prohibited,test,critical,notice,error,regdate)
+		VALUES
+		(#group_id#,#comments#,#search_status#,#name#,#search_time#,#matches#,#prohibited#,#test#,#critical#,#notice#,#error#,now())
+		ON DUPLICATE KEY UPDATE
+		regdate=now()
+
+	</insert>
+
+	<insert id="setTarget" parameterClass="com.skyun.recon.util.database.ibatis.vo.targetVo">
+
+		INSERT INTO pi_targets
+		(group_id,target_id,comments,search_status,search_time,name,platform,critical,error,notice,test,prohibited,matchcnt,regdate)
+		VALUES
+		(#group_id#,#target_id#,#comments#,#search_status#,#search_time#,#name#,#platform#,#critical#,#error#,#notice#,#test#,#prohibited#,#matchcnt#,now())
+		ON DUPLICATE KEY UPDATE
+		matchcnt=matchcnt,
+		error=#error#,
+		search_status=#search_status#,
+		search_time=#search_time#
+	</insert>
+
+	<insert id="setLocation" parameterClass="com.skyun.recon.util.database.ibatis.vo.locationVo">
+
+		INSERT INTO pi_locations
+		(group_id,target_id,location_id,proxy_id,credential_id,search_time,path,protocol,search_status,description,test,prohibited,matchcnt,critical,error,regdate)
+		VALUES
+		(#group_id#,#target_id#,#location_id#,#proxy_id#,#credential_id#,#search_time#,#path#,#protocol#,#search_status#,#description#,#test#,#prohibited#,#matchcnt#,#critical#,#error#,now())
+		ON DUPLICATE
+		KEY UPDATE
+		matchcnt=matchcnt
+
+	</insert>
+
+	<!--  2019년 농협 에서 요청 owner 데이타 Merge시 Update 안함  -->
+	<insert id="setFind" parameterClass="com.skyun.recon.util.database.ibatis.vo.findlVo">
+		INSERT INTO pi_find
+			(hash_id,group_id, target_id, path, fid,account,owner,regdate,credate)
+		VALUES
+			(#hash_id#,#group_id#,#target_id#,#path#,#fid#,#account#,#owner#,now(),now())
+		ON DUPLICATE KEY
+		UPDATE
+			path=#path#,
+			account=#account#,
+			regdate=now()
+<!--	KB INSERT	
+ 		INSERT INTO pi_find
+			(hash_id,group_id, target_id, path, fid,remediation_status,account,owner,regdate,credate)
+		VALUES
+			(#hash_id#,#group_id#,#target_id#,#path#,#fid#,#remediation_status#,#account#,#owner#,now(),now())
+		ON DUPLICATE KEY
+		UPDATE
+			path=#path#,
+			account=#account#,
+			remediation_status=#remediation_status#,
+			regdate=now() -->
+	</insert>
+
+	<insert id="setSubpath" parameterClass="com.skyun.recon.util.database.ibatis.vo.subpathVo">
+		INSERT INTO pi_subpath
+		(group_id,target_id,parent_id,node_id,info_id,path,account,owner,regdate)
+		VALUES
+		(#group_id#,#target_id#,#parent_id#,#node_id#,#info_id#,#path#,#account#,#owner#,now())
+		ON DUPLICATE KEY UPDATE
+		regdate=now()
+<!-- KB INSERT	
+		INSERT INTO pi_subpath
+		(group_id,target_id,parent_id,node_id,info_id,remediation_status,path,account,owner,regdate)
+		VALUES
+		(#group_id#,#target_id#,#parent_id#,#node_id#,#info_id#,#remediation_status#,#path#,#account#,#owner#,now())
+		ON DUPLICATE KEY UPDATE
+		remediation_status=#remediation_status#,
+		regdate=now() -->
+	</insert>
+
+	<insert id="setAgentStatus1" parameterClass="com.skyun.recon.util.database.ibatis.vo.agentVo">
+		INSERT INTO pi_agents
+		(agent_id,agent_name,agent_type,agent_version,agent_platform,agent_platform_compatibility,agent_verified,agent_connected,agent_proxy,agent_user,agent_cpu,agent_cores,agent_boot,agent_ram,agent_started,agent_connected_ip)
+		VALUES
+		(#agent_id#,#agent_name#,#agent_type#,#agent_version#,#agent_platform#,#agent_platform_compatibility#,#agent_verified#,#agent_connected#,#agent_proxy#,#agent_user#,#agent_cpu#,#agent_cores#,#agent_boot#,#agent_ram#,#agent_started#,#agent_connected_ip#)
+		ON DUPLICATE KEY UPDATE
+		agent_connected=#agent_connected#,
+		agent_boot=#agent_boot#,
+		agent_ram=#agent_ram#,
+		agent_started=#agent_started#,
+		agent_connected_ip=#agent_connected_ip#
+	</insert>
+
+	<insert id="setAgentStatus2" parameterClass="com.skyun.recon.util.database.ibatis.vo.agentVo">
+		INSERT INTO pi_agents
+		(agent_id,agent_name,agent_type,agent_version,agent_platform,agent_platform_compatibility,agent_verified,agent_connected,agent_proxy,agent_user,agent_cpu,agent_cores,agent_boot,agent_ram,agent_started,agent_connected_ip)
+		VALUES
+		(#agent_id#,#agent_name#,#agent_type#,#agent_version#,#agent_platform#,#agent_platform_compatibility#,#agent_verified#,#agent_connected#,#agent_proxy#,#agent_user#,#agent_cpu#,#agent_cores#,#agent_boot#,#agent_ram#,#agent_started#,#agent_connected_ip#)
+		ON DUPLICATE KEY UPDATE
+		agent_connected=#agent_connected#,
+		agent_boot=#agent_boot#,
+		agent_ram=#agent_ram#,
+		agent_started=#agent_started#
+	</insert>
+
+	<insert id="setNetInfo" parameterClass="com.skyun.recon.util.database.ibatis.vo.networkVo">
+		INSERT INTO pi_networks
+		(agent_id,device,ip,mac,regdate)
+		VALUES
+		(#agent_id#,#device#,#ip#,#mac#,now())
+		ON DUPLICATE KEY UPDATE
+		regdate=now()
+	</insert>
+
+	<insert id="setSchedule" parameterClass="com.skyun.recon.util.database.ibatis.vo.schdelesVo">
+		INSERT INTO pi_schedules
+		(
+			schedule_id,
+			schedule_status,
+			schedule_label,
+			schedule_repeat_days,
+			schedule_repeat_months,
+			schedule_datatype_profiles,
+			schedule_next_scan,
+			schedule_target_id,
+			schedule_target_name,
+			schedule_cpu,
+			schedule_capture,
+			schedule_trace,
+			schedule_pause_days,
+			schedule_pause_from,
+			schedule_pause_to,
+			regdate
+		)
+		VALUES
+		(
+			#schedule_id#,
+			#schedule_status#,
+			#schedule_label#,
+			#schedule_repeat_days#,
+			#schedule_repeat_months#,
+			#schedule_datatype_profiles#,
+			#schedule_next_scan#,
+			#schedule_target_id#,
+			#schedule_target_name#,
+			#schedule_cpu#,
+			#schedule_capture#,
+			#schedule_trace#,
+			#schedule_pause_days#,
+			#schedule_pause_from#,
+			#schedule_pause_to#,
+			now()
+		)
+		ON DUPLICATE KEY UPDATE
+		schedule_label=#schedule_label#,
+		schedule_status=#schedule_status#,
+		regdate=now()
+	</insert>
+
+	<insert id="setSchLocation" parameterClass="com.skyun.recon.util.database.ibatis.vo.schedule_locationVo">
+		INSERT INTO pi_scheduled_location
+		(sch_id,target_id,location_id,status,name,started,updated)
+		VALUES
+		(#sch_id#,#target_id#,#location_id#,#status#,#name#,#started#,#updated#)
+		ON DUPLICATE KEY UPDATE
+		status=#status#
+	</insert>
+
+	<insert id="setSummary" parameterClass="com.skyun.recon.util.database.ibatis.vo.summaryVo">
+		INSERT INTO pi_summary
+		(group_id,target_id,object_id,data_type,match_count,remediation_status,purge_count)
+		VALUES
+		(#group_id#,#target_id#,#object_id#,#data_type#,#match_count#,#remediation_status#,#purge_count#)
+		ON DUPLICATE KEY UPDATE
+		match_count=#match_count#,
+		remediation_status=#remediation_status#,
+		purge_count=#purge_count#
+	</insert>
+
+	<insert id="setProfile" parameterClass="com.skyun.recon.util.database.ibatis.vo.porfileVo">
+		INSERT INTO pi_datatypes
+		(datatype_id,datatype_label,version,owner,modified,defaults,disabled,global,sealed)
+		VALUES
+		(#datatype_id#,#datatype_label#,#version#,#owner#,#modified#,#defaults#,#disabled#,#global#,#sealed#)
+		ON DUPLICATE KEY UPDATE
+		datatype_label=#datatype_label#,
+		version=#version#,
+		owner=#owner#,
+		modified=#modified#,
+		defaults=#defaults#,
+		disabled=#disabled#,
+		global=#global#,
+		sealed=#sealed#
+
+	</insert>
+</sqlMap>

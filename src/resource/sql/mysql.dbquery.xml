@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="EUC-KR"?>
+
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"  "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="query">
+	<select id="getgroupall" parameterClass="String" resultClass="com.skyun.recon.util.database.ibatis.vo.groupallVo">
+		SELECT
+		group_id,comments,search_status,name,search_time,matches,prohibited,test,critical,notice,error,regdate
+		FROM pi_groupall
+	</select>
+	<select id="isThereTarget" parameterClass="com.skyun.recon.util.database.ibatis.vo.targetVo" resultClass="com.skyun.recon.util.database.ibatis.vo.targetVo">
+		SELECT
+		group_id,target_id,comments,name,search_status,name,critical,error,notice,test,prohibited,matchcnt
+		FROM pi_targets
+		where group_id=#group_id#
+		and target_id=#target_id#
+		and search_time=#search_time#
+	</select>
+	
+	<select id="getExceptionList" resultClass="com.skyun.recon.util.database.ibatis.vo.exceptionVo">
+		SELECT
+			group_id,target_id,hash_id
+		FROM pi_exception
+		where approval_status='E'
+	</select>
+	
+	<select id="getpiAccountInfo" resultClass="com.skyun.recon.util.database.ibatis.vo.pi_account_info">
+		SELECT 
+			a.svr_host as svr_host,
+			a.ACCOUNT as ACCOUNT,
+			a.user_id as user_id,
+			b.target_id as target_id
+		from pi_account_info a, pi_targets b 
+		WHERE a.svr_host=b.name
+		ORDER BY 1,2,3	
+	</select>
+	
+</sqlMap>
