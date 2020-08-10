@@ -87,7 +87,8 @@ public class JobConsumerTask {
 						fvo.setPath(f.getPath());
 						fvo.setFid(f.getId());
 						
-						fvo.setHash_id((gid + tid + fvo.getPath()).hashCode() + "");
+						//fvo.setHash_id((gid + tid + fvo.getPath()).hashCode() + "");
+						fvo.setHash_id((tid + fvo.getPath()).hashCode() + "");
 						
 
 						if (AppConfig.account.get(tid + "_" + f.getOwner()) != null) {
@@ -95,10 +96,10 @@ public class JobConsumerTask {
 						}
 						
 						// KB
-						/*if(f.getRems() != null) {
+						if(f.getRems() != null) {
 							String remedition = getRemediations(f.getRems());
 							fvo.setRemediation_status(remedition);
-						}*/
+						}
 
 						try {
 							this.sqlMap.openSession().insert("insert.setFind", fvo);
@@ -124,6 +125,8 @@ public class JobConsumerTask {
 						if (f.getSubs() != null) {
 							try {
 								RecursiveCall(f.getSubs(), fvo.getHash_id());
+								// KB
+								//RecursiveCall(f.getSubs(), fvo.getHash_id(), fvo.getHash_id());
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
 								logger.error("Error RecursiveCall SQLException  Target_ID:" + tid);
@@ -186,12 +189,12 @@ public class JobConsumerTask {
 			
 			
 			// KB 
-			/*if(s.getRems() != null) {
+			if(s.getRems() != null) {
 				String remedition = getRemediations(s.getRems());
 				fvo.setRemediation_status(remedition);
 				if(i == 0)
 					this.sqlMap.openSession().update("update.setFind", fvo);
-			}*/
+			}
 			i++;
 			this.sqlMap.openSession().insert("insert.setSubpath", fvo);
 
@@ -202,6 +205,45 @@ public class JobConsumerTask {
 			}
 		}
 	}
+	// KB Bank remediation
+	/*private void RecursiveCall(List<subpaths> subs, String pid, String hashID) throws SQLException {
+		int i = 0;
+		for (subpaths s : subs) {
+			subpathVo fvo = new subpathVo();
+			
+			fvo.setGroup_id(gid);
+			fvo.setTarget_id(tid);
+			fvo.setParent_id(pid);
+			fvo.setAccount(s.getOwner());
+			fvo.setOwner(AppConfig.account.get(tid + "_" + s.getOwner()));
+			
+			String match = "[^\uAC00-\uD7A3xfe0-9a-zA-Z\\s]";
+			fvo.setPath(s.getPath().replaceAll(match, " "));
+			
+			fvo.setInfo_id(s.getId());
+			fvo.setNode_id((gid + tid + pid + fvo.getPath()).hashCode() + "");
+			// this.sqlMap.insert("insert.setSubpath", fvo);
+			
+			
+			// KB 
+			if(s.getRems() != null) {
+				subpathVo fvo2 = new subpathVo();
+				String remedition = getRemediations(s.getRems());
+				fvo2.setParent_id(hashID);
+				fvo2.setRemediation_status(remedition);
+				if(i == 0)
+					this.sqlMap.openSession().update("update.setFind", fvo2);
+			}
+			i++;
+			this.sqlMap.openSession().insert("insert.setSubpath", fvo);
+			
+			setSummary(fvo.getNode_id(), "S", s.getSummary());
+			
+			if (s.getSubs() != null) {
+				RecursiveCall(s.getSubs(), fvo.getNode_id(), hashID);
+			}
+		}
+	}*/
 
 	private void setSummary(String nid, String dtype, List<summaryCo> lst) throws SQLException {
 		

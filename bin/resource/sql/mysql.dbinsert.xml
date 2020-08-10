@@ -51,8 +51,8 @@
 			path=#path#,
 			account=#account#,
 			regdate=now()
-<!--	KB INSERT	
- 		INSERT INTO pi_find
+	<!--KB INSERT	-->
+ 		<!-- INSERT INTO pi_find
 			(hash_id,group_id, target_id, path, fid,remediation_status,account,owner,regdate,credate)
 		VALUES
 			(#hash_id#,#group_id#,#target_id#,#path#,#fid#,#remediation_status#,#account#,#owner#,now(),now())
@@ -61,7 +61,7 @@
 			path=#path#,
 			account=#account#,
 			remediation_status=#remediation_status#,
-			regdate=now() -->
+			regdate=now()  -->
 	</insert>
 
 	<insert id="setSubpath" parameterClass="com.skyun.recon.util.database.ibatis.vo.subpathVo">
@@ -71,14 +71,14 @@
 		(#group_id#,#target_id#,#parent_id#,#node_id#,#info_id#,#path#,#account#,#owner#,now())
 		ON DUPLICATE KEY UPDATE
 		regdate=now()
-<!-- KB INSERT	
+ <!--KB INSERT	 
 		INSERT INTO pi_subpath
 		(group_id,target_id,parent_id,node_id,info_id,remediation_status,path,account,owner,regdate)
 		VALUES
 		(#group_id#,#target_id#,#parent_id#,#node_id#,#info_id#,#remediation_status#,#path#,#account#,#owner#,now())
 		ON DUPLICATE KEY UPDATE
 		remediation_status=#remediation_status#,
-		regdate=now() -->
+		regdate=now()-->
 	</insert>
 
 	<insert id="setAgentStatus1" parameterClass="com.skyun.recon.util.database.ibatis.vo.agentVo">
@@ -157,6 +157,17 @@
 		ON DUPLICATE KEY UPDATE
 		schedule_label=#schedule_label#,
 		schedule_status=#schedule_status#,
+		schedule_repeat_days=#schedule_repeat_days#,
+		schedule_repeat_months=#schedule_repeat_months#,
+		schedule_datatype_profiles=#schedule_datatype_profiles#,
+		schedule_cpu=#schedule_cpu#,
+		schedule_capture=#schedule_capture#,
+		schedule_target_id=#schedule_target_id#,
+		schedule_target_name=#schedule_target_name#,
+		schedule_trace=#schedule_trace#,
+		schedule_pause_days=#schedule_pause_days#,
+		schedule_pause_from=#schedule_pause_from#,
+		schedule_pause_to=#schedule_pause_to#,
 		regdate=now()
 	</insert>
 
